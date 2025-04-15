@@ -3,7 +3,16 @@ name: Build and Release Tomato Novel Downloader
 on:
   push:
     branches: [ "main" ]
+<<<<<<< HEAD
     tags: [ "v*" ]  # 打标签时触发发布
+=======
+    tags: [ "v*" ]
+    paths: 
+      - '**.py'          # 所有 Python 文件
+      - 'requirements.txt' # 依赖清单
+      - 'img/**'         # 图标资源目录
+  pull_request:
+>>>>>>> unlite/main
 
 jobs:
   build-linux:
@@ -44,11 +53,20 @@ jobs:
             --exclude-module _bootlocale \
             --exclude-module _cffi_backend \
             --collect-data fake_useragent \
+<<<<<<< HEAD
             --name=TomatoNovelDownloader-Linux_amd64-$VERSION \
             --clean \
             2.py
 
       - name: Upload Artifact
+=======
+            -i img/Tomato-downlaoder-ico.ico \
+            --name=TomatoNovelDownloader-Linux_amd64-$VERSION \
+            --clean \
+            main.py
+      
+      - name: Upload Linux Artifact
+>>>>>>> unlite/main
         uses: actions/upload-artifact@v4
         with:
           name: linux-build
@@ -94,6 +112,56 @@ jobs:
           name: linux-arm64-build
           path: dist/TomatoNovelDownloader-Linux_arm64-*
 
+  build-linux-arm64:
+    runs-on: ubuntu-24.04-arm  # 使用ARM64架构的运行器
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build Executable
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            VERSION="${{ github.ref_name }}"
+          else
+            VERSION="sha-${{ github.sha }}"
+          fi
+
+          pyinstaller \
+            --onefile \
+            --strip \
+            --exclude-module _bootlocale \
+            --exclude-module _cffi_backend \
+            --collect-data fake_useragent \
+            -i img/Tomato-downlaoder-ico.ico \
+            --name=TomatoNovelDownloader-Linux_arm64-$VERSION \
+            --clean \
+            main.py
+      
+      - name: Upload Linux ARM64 Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-arm64-build
+          path: dist/TomatoNovelDownloader-*
+
   build-windows:
     runs-on: windows-latest
     steps:
@@ -132,11 +200,20 @@ jobs:
           pyinstaller --onefile `
             --upx-dir "$upxDir" `
             --collect-data fake_useragent `
+<<<<<<< HEAD
             --name=TomatoNovelDownloader-Win64-$version `
             --clean `
             2.py
 
       - name: Upload Artifact
+=======
+            -i img/Tomato-downlaoder-ico.ico `
+            --name=TomatoNovelDownloader-Win64-$version `
+            --clean `
+            main.py
+      
+      - name: Upload Windows Artifact
+>>>>>>> unlite/main
         uses: actions/upload-artifact@v4
         with:
           name: windows-build
@@ -172,9 +249,13 @@ jobs:
             --exclude-module _bootlocale \
             --exclude-module _cffi_backend \
             --collect-data fake_useragent \
+<<<<<<< HEAD
+=======
+            -i img/Tomato-downlaoder-ico.ico \
+>>>>>>> unlite/main
             --name=TomatoNovelDownloader-macOS_arm64-$VERSION \
             --clean \
-            2.py
+            main.py
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -193,11 +274,19 @@ jobs:
         with:
           path: release-artifacts
 
+<<<<<<< HEAD
       - name: Create Release
+=======
+      - name: List Artifacts
+        run: ls -R release-artifacts
+
+      - name: Create Unified Release
+>>>>>>> unlite/main
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
           files: |
+<<<<<<< HEAD
             release-artifacts/linux-build/*
             release-artifacts/linux-arm64-build/*
             release-artifacts/windows-build/*.exe
@@ -215,3 +304,9 @@ jobs:
             - `TomatoNovelDownloader-macOS_*`  
 
             c **源码地址**: https://github.com/${{ github.repository }}
+=======
+            release-artifacts/linux-build/TomatoNovelDownloader-Linux_amd64-*
+            release-artifacts/linux-arm64-build/TomatoNovelDownloader-Linux_arm64-*
+            release-artifacts/windows-build/TomatoNovelDownloader-Win64-*.exe
+            release-artifacts/macos-build/TomatoNovelDownloader-macOS_arm64-*
+>>>>>>> unlite/main

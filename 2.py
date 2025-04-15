@@ -322,7 +322,7 @@ def get_chapters_from_api(book_id, headers):
         print(f"从API获取章节列表失败: {str(e)}")
         return None
 
-def download_chapter(chapter, headers, save_path, book_name, downloaded, book_id):
+def download_chapter(chapter, headers, save_path, book_name, downloaded, book_id, author_name):
     """下载单个章节"""
     if chapter["id"] in downloaded:
         return None
@@ -330,7 +330,8 @@ def download_chapter(chapter, headers, save_path, book_name, downloaded, book_id
     chapter_title, content = down_text(chapter["id"], headers, book_id)
     
     if content:
-        output_file_path = os.path.join(save_path, f"{book_name}.txt")
+        # 修改文件名格式
+        output_file_path = os.path.join(save_path, f"{book_name} 作者：{author_name}.txt")
         try:
             with open(output_file_path, 'a', encoding='utf-8') as f:
                 if chapter_title:
@@ -420,6 +421,7 @@ def Run(book_id, save_path):
         # 获取所有已下载的章节索引
         downloaded_indices = sorted(chapter_results.keys())
 
+        # 修改文件名格式
         with open(output_file_path, 'w', encoding='utf-8') as f:
             f.write(f"小说名: {name}\n作者: {author_name}\n内容简介: {description}\n\n")
             
@@ -476,7 +478,8 @@ def Run(book_id, save_path):
         os.makedirs(save_path, exist_ok=True)
 
         # 写入书籍信息
-        output_file_path = os.path.join(save_path, f"{name}.txt")
+        # 修改文件名格式
+        output_file_path = os.path.join(save_path, f"{name} 作者：{author_name}.txt")
         if not os.path.exists(output_file_path):
             with open(output_file_path, 'w', encoding='utf-8') as f:
                 f.write(f"小说名: {name}\n作者: {author_name}\n内容简介: {description}\n\n")

@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# 番茄小说下载器精简版
-如你所见，这个程序只有不到22kb的python文件，但这不影响它的功能！这个程序简单易操作，可以满足你的小说下载需求，需要运行此程序的话，最好是在终端中，以下的所有需要输入的内容都需要在终端中进行，并且在使用此程序之前，您必须先安装python！
-=======
 # 番茄小说下载器~~精简版~~
 
 番茄小说下载器*不精简*版本，由于项目[fanqienovel-downloader](https://github.com/ying-ck/fanqienovel-downloader)一直不更新，于是我根据Dimily的项目Fork并重构
@@ -12,7 +8,6 @@
 
 ---
 
->>>>>>> unlite/main
 ## 我该如何使用？
 
 根据自己的系统版本在[Releases](https://github.com/zhongbai2333/Tomato-Novel-Downloader/releases)列表下载可执行文件，并运行
